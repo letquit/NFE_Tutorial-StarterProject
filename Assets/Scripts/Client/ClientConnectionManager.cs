@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using Common;
+using TMPro;
 using Unity.Entities;
 using Unity.NetCode;
 using Unity.Networking.Transport;
@@ -139,17 +140,34 @@ namespace TMG.NFE_Tutorial
         /// </summary>
         private void StartClient()
         {
+            // 创建客户端世界
             var clientWorld = ClientServerBootstrap.CreateClientWorld("Turbo Client World");
 
+            // 解析连接端点
             var connectionEndpoint = NetworkEndpoint.Parse(Address, Port);
             {
+                // 获取网络驱动查询并连接到服务器
                 using var networkDriverQuery =
                     clientWorld.EntityManager.CreateEntityQuery(ComponentType.ReadWrite<NetworkStreamDriver>());
                 networkDriverQuery.GetSingletonRW<NetworkStreamDriver>().ValueRW
                     .Connect(clientWorld.EntityManager, connectionEndpoint);
             }
 
-            World.DefaultGameObjectInjectionWorld = clientWorld;
+            // 根据下拉菜单值映射队伍类型
+            var team = _teamDropdown.value switch
+            {
+                0 => TeamType.AutoAssign,
+                1 => TeamType.Blue,
+                2 => TeamType.Red,
+                _ => TeamType.None
+            };
+            
+            // 创建队伍请求实体
+            var teamRequestEntity = clientWorld.EntityManager.CreateEntity();
+            clientWorld.EntityManager.AddComponentData(teamRequestEntity, new ClientTeamRequest
+            {
+                Value = team
+            });
         }
     }
 }
