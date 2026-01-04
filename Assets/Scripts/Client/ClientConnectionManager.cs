@@ -1,10 +1,16 @@
 ﻿using TMPro;
+using Unity.Entities;
+using Unity.NetCode;
+using Unity.Networking.Transport;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace TMG.NFE_Tutorial
 {
+    /// <summary>
+    /// 客户端连接管理器，负责处理网络连接相关的UI交互和连接逻辑
+    /// </summary>
     public class ClientConnectionManager : MonoBehaviour
     {
         [SerializeField] private TMP_InputField _addressField;
@@ -13,9 +19,19 @@ namespace TMG.NFE_Tutorial
         [SerializeField] private TMP_Dropdown _teamDropdown;
         [SerializeField] private Button _connectButton;
         
+        /// <summary>
+        /// 获取端口号，从端口输入字段解析
+        /// </summary>
         private ushort Port => ushort.Parse(_portField.text);
+        
+        /// <summary>
+        /// 获取地址，从地址输入字段获取
+        /// </summary>
         private string Address => _addressField.text;
 
+        /// <summary>
+        /// 当组件启用时调用，注册UI事件监听器
+        /// </summary>
         private void OnEnable()
         {
             _connectionModeDropdown.onValueChanged.AddListener(OnConnectionModeChanged);
@@ -23,12 +39,19 @@ namespace TMG.NFE_Tutorial
             OnConnectionModeChanged(_connectionModeDropdown.value);
         }
 
+        /// <summary>
+        /// 当组件禁用时调用，移除UI事件监听器
+        /// </summary>
         private void OnDisable()
         {
             _connectionModeDropdown.onValueChanged.RemoveAllListeners();
             _connectButton.onClick.RemoveAllListeners();
         }
 
+        /// <summary>
+        /// 连接模式改变时的回调函数，更新连接按钮的标签文本
+        /// </summary>
+        /// <param name="connectionMode">连接模式索引值</param>
         private void OnConnectionModeChanged(int connectionMode)
         {
             string buttonLabel;
@@ -55,6 +78,9 @@ namespace TMG.NFE_Tutorial
             buttonText.text = buttonLabel;
         }
 
+        /// <summary>
+        /// 连接按钮点击时的回调函数，处理不同连接模式的启动逻辑
+        /// </summary>
         private void OnButtonConnect()
         {
             DestroyLocalSimulationWorld();
@@ -78,19 +104,52 @@ namespace TMG.NFE_Tutorial
             }
         }
 
+        /// <summary>
+        /// 销毁本地模拟世界，清理现有的游戏世界实例
+        /// </summary>
         private static void DestroyLocalSimulationWorld()
         {
-            
+            foreach (var world in World.All)
+            {
+                if (world.Flags == WorldFlags.Game)
+                {
+                    world.Dispose();
+                    break;
+                }
+            }
         }
 
+        /// <summary>
+        /// 启动服务器，创建服务器世界并开始监听指定端口
+        /// </summary>
         private void StartServer()
         {
-            
+            var serverWorld = ClientServerBootstrap.CreateServerWorld("Turbo Server World");
+
+            var serverEndpoint = NetworkEndpoint.AnyIpv4.WithPort(Port);
+            {
+                using var networkDriverQuery =
+                    serverWorld.EntityManager.CreateEntityQuery(ComponentType.ReadWrite<NetworkStreamDriver>());
+                networkDriverQuery.GetSingletonRW<NetworkStreamDriver>().ValueRW.Listen(serverEndpoint);
+            }
         }
 
+        /// <summary>
+        /// 启动客户端，创建客户端世界并连接到指定服务器
+        /// </summary>
         private void StartClient()
         {
-            
+            var clientWorld = ClientServerBootstrap.CreateClientWorld("Turbo Client World");
+
+            var connectionEndpoint = NetworkEndpoint.Parse(Address, Port);
+            {
+                using var networkDriverQuery =
+                    clientWorld.EntityManager.CreateEntityQuery(ComponentType.ReadWrite<NetworkStreamDriver>());
+                networkDriverQuery.GetSingletonRW<NetworkStreamDriver>().ValueRW
+                    .Connect(clientWorld.EntityManager, connectionEndpoint);
+            }
+
+            World.DefaultGameObjectInjectionWorld = clientWorld;
         }
     }
 }
