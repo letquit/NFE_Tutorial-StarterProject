@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 117379743615377594}
   - component: {fileID: 2907308662154024674}
   - component: {fileID: 96227317334761365}
+  - component: {fileID: -7887365606476126534}
   m_Layer: 0
   m_Name: ChampionPrefab
   m_TagString: Untagged
@@ -318,6 +319,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TMG.NFE_Tutorial.ChampAuthoring
   MoveSpeed: 3.5
+--- !u!114 &-7887365606476126534
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 403193853099150282}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 985a2099a02ef294a9dce42393f39bac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TMG.NFE_Tutorial.HitPointsAuthoring
+  MaxHitPoints: 1000
 --- !u!1 &859060646936255700
 GameObject:
   m_ObjectHideFlags: 0
