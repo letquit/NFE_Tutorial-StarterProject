@@ -18,6 +18,16 @@ namespace TMG.NFE_Tutorial
         /// <param name="state">系统状态引用</param>
         public void OnCreate(ref SystemState state)
         {
+            // 需要有本地拥有的Ghost才运行
+            state.RequireForUpdate<GhostOwnerIsLocal>();
+        }
+
+        /// <summary>
+        /// 系统更新方法，为本地拥有的幽灵实体添加角色标签和移动目标位置组件
+        /// </summary>
+        /// <param name="state">系统状态引用</param>
+        public void OnUpdate(ref SystemState state)
+        {
             var ecb = new EntityCommandBuffer(Allocator.Temp);
 
             // 查询本地拥有的、没有OwnerChampTag组件的变换组件，并为它们添加标签和目标位置

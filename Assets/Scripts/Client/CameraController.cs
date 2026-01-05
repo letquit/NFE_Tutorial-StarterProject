@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace TMG.NFE_Tutorial
 {
+    /// <summary>
+    /// 相机控制器，负责处理游戏中的相机移动、缩放和定位功能
+    /// </summary>
     public class CameraController : MonoBehaviour
     {
         [SerializeField] private CinemachineVirtualCamera _cinemachineVirtualCamera;
@@ -26,10 +29,30 @@ namespace TMG.NFE_Tutorial
         [SerializeField] private Vector3 _spectatorPosition = new(0f, 0f, 0f);
         
         private Vector2 _normalScreenPercentage;
+        
+        /// <summary>
+        /// 获取标准化鼠标位置，范围在0到1之间
+        /// </summary>
         private Vector2 NormalMousePos => new Vector2(Input.mousePosition.x / Screen.width, Input.mousePosition.y / Screen.height);
+        
+        /// <summary>
+        /// 检查鼠标是否在屏幕左侧边缘区域
+        /// </summary>
         private bool InScreenLeft => NormalMousePos.x < _normalScreenPercentage.x  && Application.isFocused;
+        
+        /// <summary>
+        /// 检查鼠标是否在屏幕右侧边缘区域
+        /// </summary>
         private bool InScreenRight => NormalMousePos.x > 1 - _normalScreenPercentage.x  && Application.isFocused;
+        
+        /// <summary>
+        /// 检查鼠标是否在屏幕顶部边缘区域
+        /// </summary>
         private bool InScreenTop => NormalMousePos.y < _normalScreenPercentage.y  && Application.isFocused;
+        
+        /// <summary>
+        /// 检查鼠标是否在屏幕底部边缘区域
+        /// </summary>
         private bool InScreenBottom => NormalMousePos.y > 1 - _normalScreenPercentage.y  && Application.isFocused;
 
         private CinemachineFramingTransposer _transposer;
@@ -38,12 +61,18 @@ namespace TMG.NFE_Tutorial
         private EntityQuery _localChampQuery;
         private bool _cameraSet;
         
+        /// <summary>
+        /// 初始化相机组件和标准化屏幕百分比
+        /// </summary>
         private void Awake()
         {
             _normalScreenPercentage = _screenPercentageDetection * 0.01f;
             _transposer = _cinemachineVirtualCamera.GetCinemachineComponent<CinemachineFramingTransposer>();
         }
 
+        /// <summary>
+        /// 初始化实体管理器和查询，并根据玩家团队设置相机初始位置
+        /// </summary>
         private void Start()
         {
             if (World.DefaultGameObjectInjectionWorld == null) return;
@@ -71,11 +100,17 @@ namespace TMG.NFE_Tutorial
             }
         }
 
+        /// <summary>
+        /// 在编辑器中验证时更新标准化屏幕百分比
+        /// </summary>
         private void OnValidate()
         {
             _normalScreenPercentage = _screenPercentageDetection * 0.01f;
         }
 
+        /// <summary>
+        /// 更新相机状态，包括自动分配团队相机设置、相机移动和缩放
+        /// </summary>
         private void Update()
         {
             SetCameraForAutoAssignTeam();
@@ -83,6 +118,10 @@ namespace TMG.NFE_Tutorial
             ZoomCamera();
         }
 
+        /// <summary>
+        /// 根据鼠标位置在屏幕边缘的检测来移动相机
+        /// 并确保相机位置在指定边界范围内
+        /// </summary>
         private void MoveCamera()
         {
             if (InScreenLeft)
@@ -111,6 +150,9 @@ namespace TMG.NFE_Tutorial
             }
         }
 
+        /// <summary>
+        /// 处理鼠标滚轮输入来缩放相机距离
+        /// </summary>
         private void ZoomCamera()
         {
             if (Mathf.Abs(Input.mouseScrollDelta.y) > float.Epsilon)
@@ -121,6 +163,9 @@ namespace TMG.NFE_Tutorial
             }
         }
 
+        /// <summary>
+        /// 为自动分配团队的玩家设置相机位置
+        /// </summary>
         private void SetCameraForAutoAssignTeam()
         {
             if (!_cameraSet)
@@ -140,6 +185,9 @@ namespace TMG.NFE_Tutorial
             }
         }
 
+        /// <summary>
+        /// 在编辑器中绘制相机边界线框
+        /// </summary>
         private void OnDrawGizmos()
         {
             if (!_drawBounds) return;

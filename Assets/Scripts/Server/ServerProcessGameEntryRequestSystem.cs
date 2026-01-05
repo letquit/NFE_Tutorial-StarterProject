@@ -80,6 +80,9 @@ namespace Server
                 ecb.SetComponent(newChamp, new GhostOwner { NetworkId = clientId });
                 ecb.SetComponent(newChamp, new MobaTeam { Value = requestedTeamType });
                 
+                // 设置 Champion 的移动目标位置为当前的出生位置
+                ecb.SetComponent(newChamp, new ChampMoveTargetPosition { Value = spawnPosition });
+                
                 ecb.AppendToBuffer(requestSource.SourceConnection, new LinkedEntityGroup { Value = newChamp });
             }
             
