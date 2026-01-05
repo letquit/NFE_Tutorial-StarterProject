@@ -317,6 +317,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1eb4c495aaa159c49a4ddf597d119158, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TMG.NFE_Tutorial.ChampAuthoring
+  MoveSpeed: 3.5
 --- !u!1 &859060646936255700
 GameObject:
   m_ObjectHideFlags: 0

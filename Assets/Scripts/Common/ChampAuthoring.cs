@@ -9,6 +9,8 @@ namespace TMG.NFE_Tutorial
     /// </summary>
     public class ChampAuthoring : MonoBehaviour
     {
+        public float MoveSpeed;
+        
         /// <summary>
         /// ChampBaker是ChampAuthoring的烘焙器，负责将Authoring组件转换为运行时的实体和组件
         /// </summary>
@@ -37,6 +39,8 @@ namespace TMG.NFE_Tutorial
                 
                 // 为实体添加ChampMoveTargetPosition组件
                 AddComponent<ChampMoveTargetPosition>(entity);
+                
+                AddComponent(entity, new CharacterMoveSpeed { Value =  authoring.MoveSpeed });
             }
         }
     }

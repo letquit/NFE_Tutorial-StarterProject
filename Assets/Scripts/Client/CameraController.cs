@@ -1,4 +1,5 @@
 ﻿using Cinemachine;
+using Common;
 using Unity.Entities;
 using UnityEngine;
 
@@ -43,7 +44,7 @@ namespace TMG.NFE_Tutorial
             _transposer = _cinemachineVirtualCamera.GetCinemachineComponent<CinemachineFramingTransposer>();
         }
 
-        /*private void Start()
+        private void Start()
         {
             if (World.DefaultGameObjectInjectionWorld == null) return;
             _entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
@@ -68,7 +69,7 @@ namespace TMG.NFE_Tutorial
                     _cameraSet = true;
                 }
             }
-        }*/
+        }
 
         private void OnValidate()
         {
@@ -77,7 +78,7 @@ namespace TMG.NFE_Tutorial
 
         private void Update()
         {
-            // SetCameraForAutoAssignTeam();
+            SetCameraForAutoAssignTeam();
             MoveCamera();
             ZoomCamera();
         }
@@ -120,7 +121,7 @@ namespace TMG.NFE_Tutorial
             }
         }
 
-        /*private void SetCameraForAutoAssignTeam()
+        private void SetCameraForAutoAssignTeam()
         {
             if (!_cameraSet)
             {
@@ -137,7 +138,7 @@ namespace TMG.NFE_Tutorial
                     _cameraSet = true;
                 }
             }
-        }*/
+        }
 
         private void OnDrawGizmos()
         {
