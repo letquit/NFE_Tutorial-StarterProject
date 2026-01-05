@@ -34,6 +34,9 @@ namespace TMG.NFE_Tutorial
                 
                 // 为实体添加URPMaterialPropertyBaseColor组件
                 AddComponent<URPMaterialPropertyBaseColor>(entity);
+                
+                // 为实体添加ChampMoveTargetPosition组件
+                AddComponent<ChampMoveTargetPosition>(entity);
             }
         }
     }
