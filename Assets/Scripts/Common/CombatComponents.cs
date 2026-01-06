@@ -55,4 +55,92 @@ namespace TMG.NFE_Tutorial
         /// </summary>
         public int Value;
     }
+
+    /// <summary>
+    /// 存储能力预制体的组件数据
+    /// </summary>
+    public struct AbilityPrefabs : IComponentData
+    {
+        /// <summary>
+        /// 范围伤害能力实体
+        /// </summary>
+        public Entity AoeAbility;
+    }
+
+    /// <summary>
+    /// 基于计时器销毁实体的组件数据
+    /// </summary>
+    public struct DestroyOnTimer : IComponentData
+    {
+        /// <summary>
+        /// 销毁倒计时值
+        /// </summary>
+        public float Value;
+    }
+
+    /// <summary>
+    /// 在指定网络tick时销毁实体的组件数据
+    /// </summary>
+    public struct DestroyAtTick : IComponentData
+    {
+        /// <summary>
+        /// 销毁实体的网络tick值
+        /// </summary>
+        [GhostField] public NetworkTick Value;
+    } 
+    
+    /// <summary>
+    /// 标记实体需要被销毁的组件数据
+    /// </summary>
+    public struct DestroyEntityTag : IComponentData {}
+
+    /// <summary>
+    /// 触发时造成伤害的组件数据
+    /// </summary>
+    public struct DamageOnTrigger : IComponentData
+    {
+        /// <summary>
+        /// 造成的伤害值
+        /// </summary>
+        public int Value;
+    }
+
+    /// <summary>
+    /// 存储已造成伤害的实体缓冲元素数据
+    /// </summary>
+    public struct AlreadyDamagedEntity : IBufferElementData
+    {
+        /// <summary>
+        /// 已造成伤害的实体
+        /// </summary>
+        public Entity Value;
+    }
+
+    /// <summary>
+    /// 能力冷却时间的组件数据
+    /// </summary>
+    public struct AbilityCooldownTicks : IComponentData
+    {
+        /// <summary>
+        /// 范围伤害能力的冷却tick数
+        /// </summary>
+        public uint AoeAbility;
+    }
+
+    /// <summary>
+    /// 预测能力冷却目标时间的命令数据组件
+    /// </summary>
+    [GhostComponent(PrefabType = GhostPrefabType.AllPredicted)]
+    public struct AbilityCooldownTargetTicks : ICommandData
+    {
+        /// <summary>
+        /// 当前命令的网络tick
+        /// </summary>
+        public NetworkTick Tick { get; set; }
+        
+        /// <summary>
+        /// 范围伤害能力的网络tick
+        /// </summary>
+        public NetworkTick AoeAbility;
+    }
 }

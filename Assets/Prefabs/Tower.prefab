@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 9109658604866127568}
   - component: {fileID: 8124654107351373686}
   - component: {fileID: 4081176945397331687}
+  - component: {fileID: -4231225479726927965}
   m_Layer: 0
   m_Name: Tower
   m_TagString: Untagged
@@ -304,3 +305,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TMG.NFE_Tutorial.MobaTeamAuthoring
   MobaTeam: 0
+--- !u!114 &-4231225479726927965
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1808960621481842931}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c79d771cedb4794bf100ce60df5f764, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.NetCode.Authoring.Hybrid::Unity.NetCode.GhostAuthoringComponent
+  DefaultGhostMode: 0
+  SupportedGhostModes: 3
+  OptimizationMode: 0
+  Importance: 50
+  MaxSendRate: 0
+  prefabId: 38f4e9377d234a64488bff6c7061bc95
+  HasOwner: 0
+  SupportAutoCommandTarget: 1
+  TrackInterpolationDelay: 0
+  GhostGroup: 0
+  UsePreSerialization: 0
+  UseSingleBaseline: 0
+  RollbackPredictedSpawnedGhostState: 0
+  RollbackPredictionOnStructuralChanges: 1

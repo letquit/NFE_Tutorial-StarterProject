@@ -41,7 +41,10 @@ namespace TMG.NFE_Tutorial
                 AddComponent<ChampMoveTargetPosition>(entity);
                 
                 // 为实体添加CharacterMoveSpeed组件
-                AddComponent(entity, new CharacterMoveSpeed { Value =  authoring.MoveSpeed });
+                AddComponent(entity, new CharacterMoveSpeed { Value = authoring.MoveSpeed });
+                
+                // 为实体添加AbilityInput组件
+                AddComponent<AbilityInput>(entity);
             }
         }
     }

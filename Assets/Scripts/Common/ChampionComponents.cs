@@ -47,4 +47,16 @@ namespace TMG.NFE_Tutorial
         /// </summary>
         [GhostField(Quantization = 0)] public float3 Value;
     }
+
+    /// <summary>
+    /// 表示能力输入组件，用于处理AOE（范围效果）能力的输入事件
+    /// </summary>
+    [GhostComponent(PrefabType = GhostPrefabType.AllPredicted)]
+    public struct AbilityInput : IInputComponentData
+    {
+        /// <summary>
+        /// AOE能力的输入事件
+        /// </summary>
+        [GhostField] public InputEvent AoeAbility;
+    }
 }
