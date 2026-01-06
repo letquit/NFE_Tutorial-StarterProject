@@ -45,6 +45,9 @@ namespace TMG.NFE_Tutorial
                 
                 // 为实体添加AbilityInput组件
                 AddComponent<AbilityInput>(entity);
+                
+                // 为实体添加AimInput组件
+                AddComponent<AimInput>(entity);
             }
         }
     }

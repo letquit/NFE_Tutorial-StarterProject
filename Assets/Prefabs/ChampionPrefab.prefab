@@ -346,7 +346,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TMG.NFE_Tutorial.AbilityAuthoring
   AoeAbility: {fileID: 2365480158197136, guid: 3832497f0bc35d1428158709ff3ab443, type: 3}
+  SkillShotAbility: {fileID: 3656565451697272077, guid: ea46a3ac13907ff4eaa04b3c07ed4270,
+    type: 3}
   AoeAbilityCooldown: 5
+  SkillShotAbilityCooldown: 3.5
   NetCodeConfig: {fileID: 11400000, guid: dce9a8c7da8b8cf4093e70364ed6f4c4, type: 2}
 --- !u!1 &859060646936255700
 GameObject:

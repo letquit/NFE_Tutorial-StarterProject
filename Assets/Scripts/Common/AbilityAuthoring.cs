@@ -15,9 +15,19 @@ namespace TMG.NFE_Tutorial
         public GameObject AoeAbility;
 
         /// <summary>
+        /// 技能射击能力对象
+        /// </summary>
+        public GameObject SkillShotAbility;
+
+        /// <summary>
         /// 范围伤害能力的冷却时间（以秒为单位）
         /// </summary>
         public float AoeAbilityCooldown;
+
+        /// <summary>
+        /// 技能射击类技能的冷却时间
+        /// </summary>
+        public float SkillShotAbilityCooldown;
 
         /// <summary>
         /// 网络代码配置对象，包含客户端和服务器的配置信息
@@ -41,15 +51,22 @@ namespace TMG.NFE_Tutorial
             public override void Bake(AbilityAuthoring authoring)
             {
                 var entity = GetEntity(TransformUsageFlags.Dynamic);
+                
+                // 创建并添加能力预制体组件
                 AddComponent(entity, new AbilityPrefabs
                 {
-                    AoeAbility = GetEntity(authoring.AoeAbility, TransformUsageFlags.Dynamic)
+                    AoeAbility = GetEntity(authoring.AoeAbility, TransformUsageFlags.Dynamic),
+                    SkillShotAbility = GetEntity(authoring.SkillShotAbility, TransformUsageFlags.Dynamic)
                 });
+                
                 // 将冷却时间（秒）转换为模拟时钟周期数
                 AddComponent(entity, new AbilityCooldownTicks
                 {
-                    AoeAbility = (uint)(authoring.AoeAbilityCooldown * authoring.SimulationTickRate)
+                    AoeAbility = (uint)(authoring.AoeAbilityCooldown * authoring.SimulationTickRate),
+                    SkillShotAbility = (uint)(authoring.SkillShotAbilityCooldown * authoring.SimulationTickRate)
                 });
+                
+                // 添加能力冷却目标时钟周期缓冲区
                 AddBuffer<AbilityCooldownTargetTicks>(entity);
             }
         }

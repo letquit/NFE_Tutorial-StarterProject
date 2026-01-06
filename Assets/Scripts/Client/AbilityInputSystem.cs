@@ -47,6 +47,16 @@ namespace TMG.NFE_Tutorial
                 newAbilityInput.AoeAbility.Set();
             }
 
+            if (_inputActions.GameplayMap.SkillShotAbility.WasPressedThisFrame())
+            {
+                newAbilityInput.SkillShotAbility.Set();
+            }
+
+            if (_inputActions.GameplayMap.ConfirmSkillShotAbility.WasPressedThisFrame())
+            {
+                newAbilityInput.ConfirmSkillShotAbility.Set();
+            }
+
             // 遍历所有具有AbilityInput组件的实体，并更新其能力输入数据
             foreach (var abilityInput in SystemAPI.Query<RefRW<AbilityInput>>())
             {

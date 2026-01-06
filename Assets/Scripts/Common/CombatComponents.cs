@@ -58,6 +58,7 @@ namespace TMG.NFE_Tutorial
 
     /// <summary>
     /// 存储能力预制体的组件数据
+    /// 该结构体用于存储不同类型的能力实体引用，作为ECS组件使用
     /// </summary>
     public struct AbilityPrefabs : IComponentData
     {
@@ -65,6 +66,12 @@ namespace TMG.NFE_Tutorial
         /// 范围伤害能力实体
         /// </summary>
         public Entity AoeAbility;
+
+        /// <summary>
+        /// 技能射击能力实体
+        /// 存储技能射击类型能力的实体引用
+        /// </summary>
+        public Entity SkillShotAbility;
     }
 
     /// <summary>
@@ -118,6 +125,7 @@ namespace TMG.NFE_Tutorial
 
     /// <summary>
     /// 能力冷却时间的组件数据
+    /// 用于存储不同类型能力的冷却时间tick数
     /// </summary>
     public struct AbilityCooldownTicks : IComponentData
     {
@@ -125,22 +133,52 @@ namespace TMG.NFE_Tutorial
         /// 范围伤害能力的冷却tick数
         /// </summary>
         public uint AoeAbility;
+        
+        /// <summary>
+        /// 技能射击能力的冷却tick数
+        /// </summary>
+        public uint SkillShotAbility;
     }
 
     /// <summary>
     /// 预测能力冷却目标时间的命令数据组件
+    /// 用于在网络同步中传递能力冷却相关的时间戳信息
     /// </summary>
     [GhostComponent(PrefabType = GhostPrefabType.AllPredicted)]
     public struct AbilityCooldownTargetTicks : ICommandData
     {
         /// <summary>
         /// 当前命令的网络tick
+        /// 表示该命令在网络时间轴上的执行时间点
         /// </summary>
         public NetworkTick Tick { get; set; }
         
         /// <summary>
         /// 范围伤害能力的网络tick
+        /// 记录范围伤害技能的冷却完成时间点
         /// </summary>
         public NetworkTick AoeAbility;
+        
+        /// <summary>
+        /// 技能射击能力的网络tick
+        /// 记录技能射击类型的冷却完成时间点
+        /// </summary>
+        public NetworkTick SkillShotAbility;
+    }
+    
+    /// <summary>
+    /// 表示瞄准技能射击的标签组件，用于标识实体具有瞄准射击能力
+    /// </summary>
+    public struct AimSkillShotTag : IComponentData {}
+
+    /// <summary>
+    /// 表示移动速度能力组件，存储实体的移动速度值
+    /// </summary>
+    public struct AbilityMoveSpeed : IComponentData
+    {
+        /// <summary>
+        /// 移动速度的数值
+        /// </summary>
+        public float Value;
     }
 }

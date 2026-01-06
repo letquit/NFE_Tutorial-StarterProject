@@ -58,5 +58,27 @@ namespace TMG.NFE_Tutorial
         /// AOE能力的输入事件
         /// </summary>
         [GhostField] public InputEvent AoeAbility;
+        
+        /// <summary>
+        /// 技能射击能力的输入事件
+        /// </summary>
+        [GhostField] public InputEvent SkillShotAbility;
+
+        /// <summary>
+        /// 确认技能射击能力的输入事件
+        /// </summary>
+        [GhostField] public InputEvent ConfirmSkillShotAbility;
+    }
+
+    /// <summary>
+    /// 表示瞄准输入组件，用于处理瞄准相关的输入数据
+    /// </summary>
+    [GhostComponent(PrefabType = GhostPrefabType.AllPredicted)]
+    public struct AimInput : IInputComponentData
+    {
+        /// <summary>
+        /// 瞄准值，表示瞄准方向或位置的三维向量
+        /// </summary>
+        [GhostField(Quantization = 0)] public float3 Value;
     }
 }
