@@ -14,4 +14,21 @@ namespace TMG.NFE_Tutorial
         /// </summary>
         public Entity Champion;
     }
+
+    /// <summary>
+    /// 存储UI预制体的组件数据类
+    /// 用于管理游戏中UI相关的预制体对象引用
+    /// </summary>
+    public class UIPrefabs : IComponentData
+    {
+        /// <summary>
+        /// 血条UI预制体对象
+        /// </summary>
+        public GameObject HealthBar;
+        
+        /// <summary>
+        /// 技能射击UI预制体对象
+        /// </summary>
+        public GameObject SkillShot;
+    }
 }

@@ -1,6 +1,7 @@
 using Unity.Collections;
 using Unity.Entities;
 using Unity.NetCode;
+using Unity.Transforms;
 using UnityEngine;
 
 namespace TMG.NFE_Tutorial
@@ -60,6 +61,12 @@ namespace TMG.NFE_Tutorial
                 
                 if (!skillShot.BeginAttack) continue;
                 ecb.AddComponent<AimSkillShotTag>(skillShot.ChampionEntity);
+                
+                if (isServer || !SystemAPI.HasComponent<OwnerChampTag>(skillShot.ChampionEntity)) continue;
+                var skillShotUIPrefab = SystemAPI.ManagedAPI.GetSingleton<UIPrefabs>().SkillShot;
+                var newSkillShotUI =
+                    Object.Instantiate(skillShotUIPrefab, skillShot.AttackPosition, Quaternion.identity);
+                ecb.AddComponent(skillShot.ChampionEntity, new SkillShotUIReference { Value = newSkillShotUI });
             }
 
             // 确认攻击并实例化技能实体，同时处理冷却时间设置
@@ -85,6 +92,23 @@ namespace TMG.NFE_Tutorial
                 curTargetTicks.Tick = nextTick;
 
                 skillShot.CooldownTargetTicks.AddCommandData(curTargetTicks);
+            }
+
+            // 用户施法后的清理UI
+            foreach (var (abilityInput, skillShotUIReference, entity) in SystemAPI
+                         .Query<AbilityInput, SkillShotUIReference>().WithAll<Simulate>().WithEntityAccess())
+            {
+                if (!abilityInput.ConfirmSkillShotAbility.IsSet) continue;
+                Object.Destroy(skillShotUIReference.Value);
+                ecb.RemoveComponent<SkillShotUIReference>(entity);
+            }
+
+            // 如果玩家实体被摧毁，清理UI
+            foreach (var (skillShotUIReference, entity) in SystemAPI.Query<SkillShotUIReference>().WithAll<Simulate>()
+                         .WithNone<LocalTransform>().WithEntityAccess())
+            {
+                Object.Destroy(skillShotUIReference.Value);
+                ecb.RemoveComponent<SkillShotUIReference>(entity);
             }
             
             ecb.Playback(state.EntityManager);

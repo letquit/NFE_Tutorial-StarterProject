@@ -292,6 +292,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TMG.NFE_Tutorial.HitPointsAuthoring
   MaxHitPoints: 250
+  HealthBarOffset: {x: 0, y: 4.5, z: 0}
 --- !u!114 &4081176945397331687
 MonoBehaviour:
   m_ObjectHideFlags: 0

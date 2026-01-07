@@ -15,6 +15,11 @@ namespace TMG.NFE_Tutorial
         public int MaxHitPoints;
 
         /// <summary>
+        /// 健康条的偏移量向量，用于定义健康条相对于目标对象的位置偏移
+        /// </summary>
+        public Vector3 HealthBarOffset;
+
+        /// <summary>
         /// HitPointsBaker类负责将HitPointsAuthoring组件烘焙为ECS实体及其相关组件
         /// </summary>
         public class HitPointsBaker : Baker<HitPointsAuthoring>
@@ -30,6 +35,7 @@ namespace TMG.NFE_Tutorial
                 AddComponent(entity, new MaxHitPoints { Value = authoring.MaxHitPoints });
                 AddBuffer<DamageBufferElement>(entity);
                 AddBuffer<DamageThisTick>(entity);
+                AddComponent(entity, new HealthBarOffset { Value = authoring.HealthBarOffset });
             }
         }
     }

@@ -38,10 +38,14 @@ namespace TMG.NFE_Tutorial
         /// <param name="state">系统状态引用</param>
         public void OnUpdate(ref SystemState state)
         {
-            // 遍历所有具有瞄准输入、本地变换组件且带有瞄准技能射击标签和所有者标签的实体
-            foreach (var (aimInput, transform) in SystemAPI.Query<RefRW<AimInput>, LocalTransform>()
+            // 遍历所有带有瞄准技能射击标签和拥有者英雄标签的实体
+            foreach (var (aimInput, transform, skillShotUIReference) in SystemAPI
+                         .Query<RefRW<AimInput>, LocalTransform, SkillShotUIReference>()
                          .WithAll<AimSkillShotTag, OwnerChampTag>())
             {
+                // 更新技能射击UI的位置为实体位置
+                skillShotUIReference.Value.transform.position = transform.Position;
+                
                 // 获取物理世界单例的碰撞世界
                 var collisionWorld = SystemAPI.GetSingleton<PhysicsWorldSingleton>().CollisionWorld;
                 // 获取主相机实体
@@ -72,6 +76,11 @@ namespace TMG.NFE_Tutorial
                     directionToTarget = math.normalize(directionToTarget);
                     // 设置瞄准输入的值为计算出的方向
                     aimInput.ValueRW.Value = directionToTarget;
+                    
+                    // 计算瞄准方向的旋转角度
+                    var angleRag = math.atan2(directionToTarget.z, directionToTarget.x);
+                    var angleDeg = math.degrees(angleRag);
+                    skillShotUIReference.Value.transform.rotation = Quaternion.Euler(0f, -angleDeg, 0f);
                 }
             }
         }
