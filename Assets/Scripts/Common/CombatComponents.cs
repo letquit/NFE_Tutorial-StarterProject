@@ -1,4 +1,5 @@
 using Unity.Entities;
+using Unity.Mathematics;
 using Unity.NetCode;
 
 namespace TMG.NFE_Tutorial
@@ -180,5 +181,64 @@ namespace TMG.NFE_Tutorial
         /// 移动速度的数值
         /// </summary>
         public float Value;
+    }
+
+    /// <summary>
+    /// NPC目标检测半径组件数据
+    /// </summary>
+    public struct NpcTargetRadius : IComponentData
+    {
+        /// <summary>
+        /// 目标检测半径值
+        /// </summary>
+        public float Value;
+    }
+
+    /// <summary>
+    /// NPC当前目标实体组件数据
+    /// </summary>
+    public struct NpcTargetEntity : IComponentData
+    {
+        /// <summary>
+        /// 当前目标实体引用，用于网络同步
+        /// </summary>
+        [GhostField] public Entity Value;
+    }
+
+    /// <summary>
+    /// NPC攻击属性组件数据
+    /// </summary>
+    public struct NpcAttackProperties : IComponentData
+    {
+        /// <summary>
+        /// 攻击发射点相对于NPC位置的偏移量
+        /// </summary>
+        public float3 FirePointOffset;
+        
+        /// <summary>
+        /// 攻击冷却时间（以游戏tick为单位）
+        /// </summary>
+        public uint CooldownTickCount;
+        
+        /// <summary>
+        /// 攻击预制体实体引用
+        /// </summary>
+        public Entity AttackPrefab;
+    }
+
+    /// <summary>
+    /// NPC攻击冷却命令数据
+    /// </summary>
+    public struct NpcAttackCooldown : ICommandData
+    {
+        /// <summary>
+        /// 网络同步tick时间戳
+        /// </summary>
+        public NetworkTick Tick { get; set; }
+        
+        /// <summary>
+        /// 攻击冷却结束的tick值
+        /// </summary>
+        public NetworkTick Value;
     }
 }
