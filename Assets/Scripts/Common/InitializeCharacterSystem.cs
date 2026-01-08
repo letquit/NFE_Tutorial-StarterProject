@@ -25,7 +25,7 @@ namespace TMG.NFE_Tutorial
         {
             var ecb = new EntityCommandBuffer(Allocator.Temp);
             foreach (var (physicsMass, mobaTeam, newCharacterEntity) in SystemAPI.Query<RefRW<PhysicsMass>, MobaTeam>()
-                         .WithAny<NewChampTag>().WithEntityAccess())
+                         .WithAny<NewChampTag, NewMinionTag>().WithEntityAccess())
             {
                 // 设置物理质量的逆惯性为零，使角色在物理模拟中保持稳定
                 physicsMass.ValueRW.InverseInertia[0] = 0f;
@@ -45,6 +45,8 @@ namespace TMG.NFE_Tutorial
                 
                 // 移除新角色标签，表示初始化完成
                 ecb.RemoveComponent<NewChampTag>(newCharacterEntity);
+                // 移除新小怪标签，表示初始化完成
+                ecb.RemoveComponent<NewMinionTag>(newCharacterEntity);
             }
             
             // 执行命令缓冲区中的所有操作

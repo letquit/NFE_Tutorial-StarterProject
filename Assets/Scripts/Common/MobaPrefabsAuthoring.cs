@@ -10,6 +10,7 @@ namespace TMG.NFE_Tutorial
     {
         [Header("Entities")]
         public GameObject Champion;
+        public GameObject Minion;
 
         [Header("GameObjects")]
         public GameObject HealthBarPrefab;
@@ -32,7 +33,8 @@ namespace TMG.NFE_Tutorial
                 // 添加MobaPrefabs组件，包含实体类型的预制体
                 AddComponent(prefabContainerEntity, new MobaPrefabs
                 {
-                    Champion = GetEntity(authoring.Champion, TransformUsageFlags.Dynamic)
+                    Champion = GetEntity(authoring.Champion, TransformUsageFlags.Dynamic),
+                    Minion = GetEntity(authoring.Minion, TransformUsageFlags.Dynamic)
                 });
                 
                 // 添加UIPrefabs组件对象，包含游戏对象类型的UI预制体

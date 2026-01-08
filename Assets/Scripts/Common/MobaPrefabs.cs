@@ -13,6 +13,11 @@ namespace TMG.NFE_Tutorial
         /// 英雄角色的实体预制体引用
         /// </summary>
         public Entity Champion;
+
+        /// <summary>
+        /// 小兵的实体预制体引用
+        /// </summary>
+        public Entity Minion;
     }
 
     /// <summary>
