@@ -23,6 +23,7 @@ namespace TMG.NFE_Tutorial
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<NetworkTime>();
+            state.RequireForUpdate<GamePlayingTag>();
         }
 
         /// <summary>

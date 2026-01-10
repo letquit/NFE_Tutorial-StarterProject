@@ -21,6 +21,7 @@ namespace TMG.NFE_Tutorial
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<NetworkTime>();
+            state.RequireForUpdate<GamePlayingTag>();
             state.RequireForUpdate<BeginSimulationEntityCommandBufferSystem.Singleton>();
         }
 
@@ -64,7 +65,7 @@ namespace TMG.NFE_Tutorial
         /// <param name="team">Moba团队</param>
         /// <param name="sortKey">查询中的块索引</param>
         [BurstCompile]
-        public void Execute(ref DynamicBuffer<NpcAttackCooldown> attackCooldown,
+        private void Execute(ref DynamicBuffer<NpcAttackCooldown> attackCooldown,
             in NpcAttackProperties attackProperties, in NpcTargetEntity targetEntity, Entity npcEntity, MobaTeam team,
             [ChunkIndexInQuery] int sortKey)
         {

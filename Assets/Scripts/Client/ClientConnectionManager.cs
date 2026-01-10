@@ -152,6 +152,9 @@ namespace TMG.NFE_Tutorial
                 networkDriverQuery.GetSingletonRW<NetworkStreamDriver>().ValueRW
                     .Connect(clientWorld.EntityManager, connectionEndpoint);
             }
+            
+            // 设置默认游戏对象注入世界为当前客户端世界
+            World.DefaultGameObjectInjectionWorld = clientWorld;
 
             // 根据下拉菜单值映射队伍类型
             var team = _teamDropdown.value switch

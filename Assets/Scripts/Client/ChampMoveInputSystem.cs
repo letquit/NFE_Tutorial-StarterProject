@@ -20,6 +20,7 @@ namespace TMG.NFE_Tutorial
         /// </summary>
         protected override void OnCreate()
         {
+            RequireForUpdate<GamePlayingTag>();
             _inputActions = new MobaInputActions();
             _selectionFilter = new CollisionFilter
             {

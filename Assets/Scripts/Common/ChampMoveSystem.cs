@@ -15,6 +15,15 @@ namespace TMG.NFE_Tutorial
     public partial struct ChampMoveSystem : ISystem
     {
         /// <summary>
+        /// 系统创建时的初始化方法，设置系统运行的前提条件
+        /// </summary>
+        /// <param name="state">系统状态引用，提供对ECS框架的访问</param>
+        public void OnCreate(ref SystemState state)
+        {
+            state.RequireForUpdate<GamePlayingTag>();
+        }
+
+        /// <summary>
         /// 系统更新方法，处理所有需要移动的角色实体
         /// </summary>
         /// <param name="state">系统状态引用，提供对ECS框架的访问</param>
@@ -23,12 +32,11 @@ namespace TMG.NFE_Tutorial
             var deltaTime = SystemAPI.Time.DeltaTime;
 
             // 遍历所有具有移动组件且需要模拟的实体
-            foreach (var (transform, movePosition, moveSpeed, entity) in SystemAPI
-                         .Query<RefRW<LocalTransform>, RefRO<ChampMoveTargetPosition>, RefRO<CharacterMoveSpeed>>()
-                         .WithAll<Simulate>()
-                         .WithEntityAccess())
+            foreach (var (transform, movePosition, moveSpeed) in SystemAPI
+                         .Query<RefRW<LocalTransform>, ChampMoveTargetPosition, CharacterMoveSpeed>()
+                         .WithAll<Simulate>())
             {
-                var moveTarget = movePosition.ValueRO.Value;
+                var moveTarget = movePosition.Value;
                 moveTarget.y = transform.ValueRO.Position.y;
 
                 // 检查是否已到达目标位置，如果距离小于阈值则跳过移动
@@ -37,7 +45,7 @@ namespace TMG.NFE_Tutorial
 
                 // 计算移动方向并更新角色位置
                 var moveDirection = math.normalize(moveTarget - transform.ValueRO.Position);
-                var moveVector = moveDirection * moveSpeed.ValueRO.Value * deltaTime;
+                var moveVector = moveDirection * moveSpeed.Value * deltaTime;
                 transform.ValueRW.Position += moveVector;
                 
                 // 更新角色朝向，使其面向移动方向

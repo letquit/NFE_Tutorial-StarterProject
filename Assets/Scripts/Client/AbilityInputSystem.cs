@@ -16,6 +16,7 @@ namespace TMG.NFE_Tutorial
         protected override void OnCreate()
         {
             _inputActions = new MobaInputActions();
+            RequireForUpdate<GamePlayingTag>();
         }
 
         /// <summary>

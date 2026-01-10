@@ -48,6 +48,9 @@ namespace TMG.NFE_Tutorial
                 
                 // 为实体添加AimInput组件
                 AddComponent<AimInput>(entity);
+                
+                // 为实体添加NetworkEntityReference组件
+                AddComponent<NetworkEntityReference>(entity);
             }
         }
     }

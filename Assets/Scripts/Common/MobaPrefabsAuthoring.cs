@@ -11,6 +11,8 @@ namespace TMG.NFE_Tutorial
         [Header("Entities")]
         public GameObject Champion;
         public GameObject Minion;
+        public GameObject GameOverEntity;
+        public GameObject RespawnEntity;
 
         [Header("GameObjects")]
         public GameObject HealthBarPrefab;
@@ -24,7 +26,7 @@ namespace TMG.NFE_Tutorial
             /// <summary>
             /// 烘焙方法，将授权组件中的预制体数据转换为ECS组件
             /// </summary>
-            /// <param name="authoring">MobaPrefabsAuthoring授权组件实例</param>
+            /// <param name="authoring">MobaPrefabsAuthoring授权组件实例，包含各种预制体的引用</param>
             public override void Bake(MobaPrefabsAuthoring authoring)
             {
                 // 创建预制体容器实体
@@ -34,7 +36,9 @@ namespace TMG.NFE_Tutorial
                 AddComponent(prefabContainerEntity, new MobaPrefabs
                 {
                     Champion = GetEntity(authoring.Champion, TransformUsageFlags.Dynamic),
-                    Minion = GetEntity(authoring.Minion, TransformUsageFlags.Dynamic)
+                    Minion = GetEntity(authoring.Minion, TransformUsageFlags.Dynamic),
+                    GameOverEntity = GetEntity(authoring.GameOverEntity, TransformUsageFlags.None),
+                    RespawnEntity = GetEntity(authoring.RespawnEntity, TransformUsageFlags.None)
                 });
                 
                 // 添加UIPrefabs组件对象，包含游戏对象类型的UI预制体

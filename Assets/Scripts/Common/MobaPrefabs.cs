@@ -18,6 +18,16 @@ namespace TMG.NFE_Tutorial
         /// 小兵的实体预制体引用
         /// </summary>
         public Entity Minion;
+
+        /// <summary>
+        /// 游戏结束界面的实体预制体引用
+        /// </summary>
+        public Entity GameOverEntity;
+
+        /// <summary>
+        /// 复活相关的实体预制体引用
+        /// </summary>
+        public Entity RespawnEntity;
     }
 
     /// <summary>

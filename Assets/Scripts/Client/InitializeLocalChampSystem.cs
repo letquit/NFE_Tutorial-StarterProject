@@ -18,8 +18,8 @@ namespace TMG.NFE_Tutorial
         /// <param name="state">系统状态引用</param>
         public void OnCreate(ref SystemState state)
         {
-            // 需要有本地拥有的Ghost才运行
-            state.RequireForUpdate<GhostOwnerIsLocal>();
+            // 仅在存在NetworkId组件时运行系统
+            state.RequireForUpdate<NetworkId>();
         }
 
         /// <summary>

@@ -17,6 +17,16 @@ namespace TMG.NFE_Tutorial
     public partial struct MoveMinionSystem : ISystem
     {
         /// <summary>
+        /// 当系统创建时调用的初始化方法
+        /// </summary>
+        /// <param name="state">系统状态引用，用于配置系统更新条件</param>
+        public void OnCreate(ref SystemState state)
+        {
+            // 配置系统更新条件：只有当存在GamePlayingTag组件的实体时才执行此系统
+            state.RequireForUpdate<GamePlayingTag>();
+        }
+
+        /// <summary>
         /// 系统更新方法，处理所有需要移动的小兵实体
         /// </summary>
         /// <param name="state">系统状态引用，提供对ECS框架的访问</param>

@@ -1,3 +1,4 @@
+using Common;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.NetCode;
@@ -19,8 +20,10 @@ namespace TMG.NFE_Tutorial
         /// <param name="state">系统状态引用</param>
         public void OnCreate(ref SystemState state)
         {
-            state.RequireForUpdate<NetworkTime>();
+            state.RequireForUpdate<RespawnEntityTag>();
+            state.RequireForUpdate<MobaPrefabs>();
             state.RequireForUpdate<BeginSimulationEntityCommandBufferSystem.Singleton>();
+            state.RequireForUpdate<NetworkTime>();
         }
 
         /// <summary>
@@ -33,7 +36,7 @@ namespace TMG.NFE_Tutorial
             
             // 检查是否是首次完全预测tick，如果不是则直接返回
             if (!networkTime.IsFirstTimeFullyPredictingTick) return;
-            var currentTIck = networkTime.ServerTick;
+            var currentTick = networkTime.ServerTick;
 
             var ecbSingleton = SystemAPI.GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>();
             var ecb = ecbSingleton.CreateCommandBuffer(state.WorldUnmanaged);
@@ -42,13 +45,44 @@ namespace TMG.NFE_Tutorial
             foreach (var (transform, entity) in SystemAPI.Query<RefRW<LocalTransform>>()
                          .WithAll<DestroyEntityTag, Simulate>().WithEntityAccess())
             {
-                // 服务器端直接销毁实体，客户端将实体移动到远距离位置
+                // 服务器端特殊处理：检查是否为游戏结束标记实体
                 if (state.World.IsServer())
                 {
+                    if (SystemAPI.HasComponent<GameOverOnDestroyTag>(entity))
+                    {
+                        var gameOverPrefab = SystemAPI.GetSingleton<MobaPrefabs>().GameOverEntity;
+                        var gameOverEntity = ecb.Instantiate(gameOverPrefab);
+
+                        var losing = SystemAPI.GetComponent<MobaTeam>(entity).Value;
+                        var winning = losing == TeamType.Blue ? TeamType.Red : TeamType.Blue;
+                        Debug.Log($"{winning.ToString()} Team Win!!");
+                        
+                        ecb.SetComponent(gameOverEntity, new WinningTeam { Value = winning });
+                    }
+
+                    // 服务器端特殊处理：检查是否为英雄单位，需要重生
+                    if (SystemAPI.HasComponent<ChampTag>(entity))
+                    {
+                        var networkEntity = SystemAPI.GetComponent<NetworkEntityReference>(entity).Value;
+                        var respawnEntity = SystemAPI.GetSingletonEntity<RespawnEntityTag>();
+                        var respawnTickCount = SystemAPI.GetComponent<RespawnTickCount>(respawnEntity).Value;
+
+                        var respawnTick = currentTick;
+                        respawnTick.Add(respawnTickCount);
+                        
+                        ecb.AppendToBuffer(respawnEntity, new RespawnBufferElement
+                        {
+                            NetworkEntity = networkEntity,
+                            RespawnTick = respawnTick,
+                            NetworkId = SystemAPI.GetComponent<NetworkId>(networkEntity).Value
+                        });
+                    }
+                    
                     ecb.DestroyEntity(entity);
                 }
                 else
                 {
+                    // 客户端处理：将实体移动到远距离位置而不是直接销毁
                     transform.ValueRW.Position = new float3(1000f, 1000f, 1000f);
                 }
             }

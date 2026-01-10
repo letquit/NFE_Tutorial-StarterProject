@@ -241,4 +241,10 @@ namespace TMG.NFE_Tutorial
         /// </summary>
         public NetworkTick Value;
     }
+    
+    /// <summary>
+    /// 游戏结束标记组件 - 当带有此组件的游戏对象被销毁时触发游戏结束逻辑
+    /// </summary>
+    public struct GameOverOnDestroyTag : IComponentData {}
+
 }
